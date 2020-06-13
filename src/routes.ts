@@ -1,16 +1,16 @@
 import { Router } from 'express'
-import multer from './config/multer'
+import multer from './utils/multer'
 import { celebrate, Joi } from 'celebrate'
 
-import PointsController from './controller/PointsController'
-import ItemsController from './controller/ItemsController'
+import PointController from './controllers/PointController'
+import ItemController from './controllers/ItemController'
 
 const router = Router()
 
-router.get('/items', ItemsController.index)
+router.get('/items', ItemController.index)
 
-router.get('/points', PointsController.index)
-router.get('/points/:id', PointsController.show)
+router.get('/points', PointController.index)
+router.get('/points/:id', PointController.show)
 router.post(
   '/points',
   multer.single('image'),
@@ -26,7 +26,7 @@ router.post(
       items: Joi.string().required()
     })
   }),
-  PointsController.create
+  PointController.create
 )
 
 export default router
