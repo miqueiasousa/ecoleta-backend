@@ -1,10 +1,10 @@
-import ItemRepository from '../repositories/ItemRepository'
+import ItemRepo from '../repositories/ItemRepo'
 
 export default class ItemService {
-  private itemRepository: ItemRepository
+  private itemRepository: ItemRepo
 
   constructor() {
-    this.itemRepository = new ItemRepository()
+    this.itemRepository = new ItemRepo()
   }
 
   public async index() {
