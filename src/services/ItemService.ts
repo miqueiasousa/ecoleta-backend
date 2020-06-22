@@ -1,4 +1,4 @@
-import ItemRepo from '../repositories/ItemRepo'
+import ItemRepo from '../database/repositories/ItemRepo'
 
 export default class ItemService {
   private itemRepository: ItemRepo

@@ -1,4 +1,4 @@
-import knex from '../database/connection'
+import knex from '../connection'
 
 export default class ItemRepository {
   private knex = knex('items')
