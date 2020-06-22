@@ -1,18 +1,20 @@
 import { Request, Response } from 'express'
-import knex from '../database/connection'
+import ItemService from '../services/ItemService'
 
-class ItemController {
-  async index(req: Request, res: Response) {
-    const itemList = await knex('items').select('*')
+export default class ItemController {
+  private itemService: ItemService
 
-    const serializedItemList = itemList.map((item) => ({
-      id: item.id,
-      image_url: `http://localhost:3030/uploads/${item.image}`,
-      title: item.title
-    }))
+  constructor() {
+    this.itemService = new ItemService()
+  }
 
-    return res.json(serializedItemList)
+  public async index(req: Request, res: Response) {
+    try {
+      const itemList = await this.itemService.index()
+
+      return res.json(itemList)
+    } catch (error) {
+      return res.json({ message: error.message })
+    }
   }
 }
-
-export default new ItemController()
