@@ -3,8 +3,8 @@ import Knex, { SchemaBuilder } from 'knex'
 export function up(knex: Knex): SchemaBuilder {
   return knex.schema.createTable('items', (table) => {
     table.increments('id').primary()
-    table.string('image').notNullable()
     table.string('title').notNullable()
+    table.string('image_url').notNullable()
   })
 }
 
