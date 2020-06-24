@@ -6,6 +6,7 @@ export default class ItemController {
 
   constructor() {
     this.itemService = new ItemService()
+    this.index = this.index.bind(this)
   }
 
   public async index(req: Request, res: Response) {

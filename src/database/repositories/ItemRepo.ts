@@ -1,11 +1,11 @@
-import knex from '../connection'
+import knex from '../../configs/knex'
 
 export default class ItemRepository {
-  private knex = knex('items')
+  private table = knex('items')
 
   public async findAll() {
     try {
-      const itemList = await this.knex.select('*')
+      const itemList = await this.table.select('*')
 
       return itemList
     } catch (error) {
