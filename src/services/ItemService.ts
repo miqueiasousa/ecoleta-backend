@@ -11,13 +11,7 @@ export default class ItemService {
     try {
       const itemList = await this.itemRepository.findAll()
 
-      const serializedItemList = itemList.map((item) => ({
-        id: item.id,
-        image_url: `http://localhost:3030/uploads/${item.image}`,
-        title: item.title
-      }))
-
-      return serializedItemList
+      return itemList
     } catch (error) {
       throw new Error(error.message)
     }
