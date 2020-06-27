@@ -39,4 +39,14 @@ export default class ItemRepository {
       throw new Error(error.message)
     }
   }
+
+  public async findOne(id: number) {
+    try {
+      const [point] = await this.table.where('id', id)
+
+      return point
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
 }
