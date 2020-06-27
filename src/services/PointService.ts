@@ -1,13 +1,32 @@
 import PointRepo from '../database/repositories/PointRepo'
+import ItemRepo from '../database/repositories/ItemRepo'
 import PointItemsRepo from '../database/repositories/PointItemsRepo'
 
 export default class ItemService {
   private pointRepository: PointRepo
+  private itemRepository: ItemRepo
   private pointItemsRepository: PointItemsRepo
 
   constructor() {
     this.pointRepository = new PointRepo()
+    this.itemRepository = new ItemRepo()
     this.pointItemsRepository = new PointItemsRepo()
+  }
+
+  public async show(id: number) {
+    try {
+      const point = await this.pointRepository.findOne(id)
+
+      if (!point) {
+        throw new Error('Point not found')
+      }
+
+      const itemList = await this.itemRepository.findByPoint(id)
+
+      return { point, itemList }
+    } catch (error) {
+      throw new Error(error.message)
+    }
   }
 
   public async create({
