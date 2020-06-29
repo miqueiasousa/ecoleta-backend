@@ -4,8 +4,8 @@ import multer from '../utils/multer'
 import PointController from '../controllers/PointController'
 
 const router = Router()
-const pointController = new PointController()
 
+router.get('/points/:id', PointController.show)
 router.post(
   '/points',
   multer.single('image'),
@@ -21,7 +21,7 @@ router.post(
       items: Joi.string().required()
     })
   }),
-  pointController.create
+  PointController.create
 )
 
 export default router

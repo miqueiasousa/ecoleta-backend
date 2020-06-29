@@ -2,26 +2,28 @@ import PointRepo from '../database/repositories/PointRepo'
 import ItemRepo from '../database/repositories/ItemRepo'
 import PointItemsRepo from '../database/repositories/PointItemsRepo'
 
+interface IData {
+  name: string
+  email: string
+  whatsapp: string
+  street: string
+  number: number
+  city: string
+  uf: string
+  image: string
+  items: string
+}
+
 export default class ItemService {
-  private pointRepository: PointRepo
-  private itemRepository: ItemRepo
-  private pointItemsRepository: PointItemsRepo
-
-  constructor() {
-    this.pointRepository = new PointRepo()
-    this.itemRepository = new ItemRepo()
-    this.pointItemsRepository = new PointItemsRepo()
-  }
-
-  public async show(id: number) {
+  public static async show(id: number) {
     try {
-      const point = await this.pointRepository.findOne(id)
+      const point = await PointRepo.findOne(id)
 
       if (!point) {
         throw new Error('Point not found')
       }
 
-      const itemList = await this.itemRepository.findByPoint(id)
+      const itemList = await ItemRepo.findByPoint(id)
 
       return { point, itemList }
     } catch (error) {
@@ -29,7 +31,7 @@ export default class ItemService {
     }
   }
 
-  public async create({
+  public static async create({
     name,
     email,
     whatsapp,
@@ -39,21 +41,11 @@ export default class ItemService {
     uf,
     image,
     items
-  }: {
-    name: string
-    email: string
-    whatsapp: string
-    street: string
-    number: number
-    city: string
-    uf: string
-    image: string
-    items: string
-  }) {
+  }: IData) {
     try {
       const image_url = `http://localhost:3030/uploads/${image}`
       const itemList = items.split(',').map((item) => Number(item.trim()))
-      const pointId = await this.pointRepository.create({
+      const pointId = await PointRepo.create({
         name,
         email,
         whatsapp,
@@ -64,14 +56,15 @@ export default class ItemService {
         image_url
       })
 
-      if (pointId) {
-        Promise.all(
-          itemList.map(async (itemId) => {
-            const a = await this.pointItemsRepository.create(pointId, itemId)
-            console.log(a)
-          })
-        )
+      if (!pointId) {
+        throw new Error('Internal Server Error')
       }
+
+      await Promise.all(
+        itemList.map(async (itemId) => {
+          await PointItemsRepo.create(pointId, itemId)
+        })
+      )
 
       return pointId
     } catch (error) {
