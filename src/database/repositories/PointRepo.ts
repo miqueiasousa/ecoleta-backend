@@ -1,38 +1,20 @@
 import knex from '../../configs/knex'
 
-export default class ItemRepository {
-  private table = knex('points')
+interface IPoint {
+  name: string
+  email: string
+  whatsapp: string
+  street: string
+  number: number
+  city: string
+  uf: string
+  image_url: string
+}
 
-  public async create({
-    name,
-    email,
-    whatsapp,
-    street,
-    number,
-    city,
-    uf,
-    image_url
-  }: {
-    name: string
-    email: string
-    whatsapp: string
-    street: string
-    number: number
-    city: string
-    uf: string
-    image_url: string
-  }) {
+export default class ItemRepository {
+  public static async create(data: IPoint) {
     try {
-      const [id] = await this.table.insert({
-        name,
-        email,
-        whatsapp,
-        street,
-        number,
-        city,
-        uf,
-        image_url
-      })
+      const [id] = await knex('points').insert(data)
 
       return id
     } catch (error) {
@@ -40,9 +22,9 @@ export default class ItemRepository {
     }
   }
 
-  public async findOne(id: number) {
+  public static async findOne(id: number) {
     try {
-      const [point] = await this.table.where('id', id)
+      const point = await knex('points').where('id', id).first()
 
       return point
     } catch (error) {
