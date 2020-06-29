@@ -1,11 +1,9 @@
 import knex from '../../configs/knex'
 
 export default class ItemRepository {
-  private table = knex('point_items')
-
-  public async create(pointId: number, itemId: number) {
+  public static async create(pointId: number, itemId: number) {
     try {
-      const [id] = await this.table.insert({
+      const [id] = await knex('point_items').insert({
         point_id: pointId,
         item_id: itemId
       })
