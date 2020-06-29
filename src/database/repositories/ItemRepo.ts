@@ -1,13 +1,9 @@
 import knex from '../../configs/knex'
 
 export default class ItemRepository {
-  private table = knex('items')
-
-  public async findByPoint(pointId: number) {
+  public static async findAll() {
     try {
-      const itemList = await this.table
-        .join('point_items', 'items.id', '=', 'point_items.item_id')
-        .where('point_items.point_id', pointId)
+      const itemList = await knex('items').select('*')
 
       return itemList
     } catch (error) {
@@ -15,9 +11,11 @@ export default class ItemRepository {
     }
   }
 
-  public async findAll() {
+  public static async findByPoint(pointId: number) {
     try {
-      const itemList = await this.table.select('*')
+      const itemList = await knex('items')
+        .join('point_items', 'items.id', '=', 'point_items.item_id')
+        .where('point_items.point_id', pointId)
 
       return itemList
     } catch (error) {

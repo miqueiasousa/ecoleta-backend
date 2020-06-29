@@ -1,15 +1,9 @@
 import ItemRepo from '../database/repositories/ItemRepo'
 
 export default class ItemService {
-  private itemRepository: ItemRepo
-
-  constructor() {
-    this.itemRepository = new ItemRepo()
-  }
-
-  public async index() {
+  public static async index() {
     try {
-      const itemList = await this.itemRepository.findAll()
+      const itemList = await ItemRepo.findAll()
 
       return itemList
     } catch (error) {

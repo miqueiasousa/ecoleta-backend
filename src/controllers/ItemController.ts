@@ -2,16 +2,9 @@ import { Request, Response } from 'express'
 import ItemService from '../services/ItemService'
 
 export default class ItemController {
-  private itemService: ItemService
-
-  constructor() {
-    this.itemService = new ItemService()
-    this.index = this.index.bind(this)
-  }
-
-  public async index(req: Request, res: Response) {
+  public static async index(req: Request, res: Response) {
     try {
-      const itemList = await this.itemService.index()
+      const itemList = await ItemService.index()
 
       return res.json(itemList)
     } catch (error) {
