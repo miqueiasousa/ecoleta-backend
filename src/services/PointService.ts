@@ -15,6 +15,23 @@ interface IData {
 }
 
 export default class ItemService {
+  public static async index(uf, city) {
+    try {
+      const pointList = await PointRepo.findByUfAndCity(uf, city)
+      const pointListWithItemList = await Promise.all(
+        pointList.map(async (point) => {
+          const itemList = await ItemRepo.findByPoint(point.id)
+
+          return { ...point, items: itemList }
+        })
+      )
+
+      return pointListWithItemList
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
   public static async show(id: number) {
     try {
       const point = await PointRepo.findOne(id)
