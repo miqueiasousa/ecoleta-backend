@@ -1,99 +1,55 @@
 import { Request, Response } from 'express'
-import knex from '../database/connection'
+import PointService from '../services/PointService'
 
-class PointController {
-  async index(req: Request, res: Response) {
-    const { city, uf, items } = req.query
-    const parseItems = String(items)
-      .split(',')
-      .map((item) => Number(item.trim()))
+export default class PointController {
+  public static async index(req: Request, res: Response) {
+    try {
+      const { uf, city } = req.query
+      const pointList = await PointService.index(uf, city)
 
-    const pointList = await knex('points')
-      .join('point_items', 'points.id', '=', 'point_items.point_id')
-      .whereIn('point_items.item_id', parseItems)
-      .where('city', String(city))
-      .where('uf', String(uf))
-      .distinct()
-      .select('points.*')
-
-    const serializedPointList = pointList.map((point) => ({
-      id: point.id,
-      image_url: `http://localhost:3030/uploads/${point.image}`,
-      email: point.email,
-      whatsapp: point.whatsapp,
-      latitude: point.latitude,
-      longitude: point.longitude,
-      city: point.city,
-      uf: point.uf
-    }))
-
-    return res.json(serializedPointList)
-  }
-
-  async show(req: Request, res: Response) {
-    const { id } = req.params
-
-    const point = await knex('points').where('id', id).first()
-
-    if (!point) return res.status(400).json({ message: 'Point not found!' })
-
-    const serializedPoint = {
-      id: point.id,
-      image_url: `http://localhost:3030/uploads/${point.image}`,
-      email: point.email,
-      whatsapp: point.whatsapp,
-      latitude: point.latitude,
-      longitude: point.longitude,
-      city: point.city,
-      uf: point.uf
+      return res.json(pointList)
+    } catch (error) {
+      return res.json({ message: error.message })
     }
-
-    const itemList = await knex('items')
-      .join('point_items', 'items.id', '=', 'point_items.item_id')
-      .where('point_items.point_id', id)
-
-    return res.json({ point: serializedPoint, items: itemList })
   }
 
-  async create(req: Request, res: Response) {
-    const {
-      name,
-      email,
-      whatsapp,
-      latitude,
-      longitude,
-      city,
-      uf,
-      items
-    } = req.body
+  public static async show(req: Request, res: Response) {
+    try {
+      const { point, itemList } = await PointService.show(Number(req.params.id))
 
-    const trx = await knex.transaction()
+      return res.json({ ...point, items: itemList })
+    } catch (error) {
+      return res.json({ message: error.message })
+    }
+  }
 
-    const [pointId] = await trx('points').insert({
-      image: req.file.filename,
-      name,
-      email,
-      whatsapp,
-      latitude,
-      longitude,
-      city,
-      uf
-    })
+  public static async create(req: Request, res: Response) {
+    try {
+      const {
+        name,
+        email,
+        whatsapp,
+        street,
+        number,
+        city,
+        uf,
+        items
+      } = req.body
+      const pointId = await PointService.create({
+        name,
+        email,
+        whatsapp,
+        street,
+        number,
+        city,
+        uf,
+        image: req.file.filename,
+        items
+      })
 
-    await trx('point_items').insert(
-      items
-        .split(',')
-        .map((item: string) => parseInt(item.trim()))
-        .map((itemId: number) => ({
-          item_id: itemId,
-          point_id: pointId
-        }))
-    )
-
-    await trx.commit()
-
-    return res.json({ status: 200 })
+      return res.location(`/points/${pointId}`).end()
+    } catch (error) {
+      return res.json({ message: error.message })
+    }
   }
 }
-
-export default new PointController()
