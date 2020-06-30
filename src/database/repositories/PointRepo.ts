@@ -31,4 +31,14 @@ export default class ItemRepository {
       throw new Error(error.message)
     }
   }
+
+  public static async findByUfAndCity(uf: string, city: string) {
+    try {
+      const pointList = await knex('points').where('uf', uf).where('city', city)
+
+      return pointList
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
 }
