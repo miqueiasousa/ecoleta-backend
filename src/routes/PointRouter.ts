@@ -5,6 +5,7 @@ import PointController from '../controllers/PointController'
 
 const router = Router()
 
+router.get('/points', PointController.index)
 router.get('/points/:id', PointController.show)
 router.post(
   '/points',
