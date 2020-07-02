@@ -48,7 +48,7 @@ export default class ItemService {
     }
   }
 
-  public static async create({
+  public static async store({
     name,
     email,
     whatsapp,

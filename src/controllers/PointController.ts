@@ -35,7 +35,7 @@ export default class PointController {
         uf,
         items
       } = req.body
-      const pointId = await PointService.create({
+      const pointId = await PointService.store({
         name,
         email,
         whatsapp,
