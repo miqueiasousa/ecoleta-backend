@@ -1,15 +1,17 @@
 import { Router } from 'express'
 import { celebrate, Joi } from 'celebrate'
-import multer from '../utils/multer'
+import multer from 'multer'
+import multerConfig from '../configs/multer'
 import PointController from '../controllers/PointController'
 
 const router = Router()
+const upload = multer(multerConfig)
 
 router.get('/points', PointController.index)
 router.get('/points/:id', PointController.show)
 router.post(
   '/points',
-  multer.single('image'),
+  upload.single('image'),
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().required(),
