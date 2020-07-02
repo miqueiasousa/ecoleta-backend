@@ -24,7 +24,7 @@ router.post(
       items: Joi.string().required()
     })
   }),
-  PointController.create
+  PointController.store
 )
 
 export default router

@@ -23,7 +23,7 @@ export default class PointController {
     }
   }
 
-  public static async create(req: Request, res: Response) {
+  public static async store(req: Request, res: Response) {
     try {
       const {
         name,
