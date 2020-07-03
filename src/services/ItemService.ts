@@ -1,7 +1,7 @@
 import ItemRepo from '../database/repositories/ItemRepo'
 
-export default class ItemService {
-  public static async index() {
+class ItemService {
+  public async index() {
     try {
       const itemList = await ItemRepo.findAll()
 
@@ -11,3 +11,5 @@ export default class ItemService {
     }
   }
 }
+
+export default new ItemService()

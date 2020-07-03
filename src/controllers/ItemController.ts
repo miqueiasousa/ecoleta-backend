@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import ItemService from '../services/ItemService'
 
-export default class ItemController {
-  public static async index(req: Request, res: Response) {
+class ItemController {
+  public async index(req: Request, res: Response): Promise<Response<JSON>> {
     try {
       const itemList = await ItemService.index()
 
@@ -12,3 +12,5 @@ export default class ItemController {
     }
   }
 }
+
+export default new ItemController()
