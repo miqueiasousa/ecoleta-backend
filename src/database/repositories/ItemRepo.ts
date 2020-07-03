@@ -1,9 +1,10 @@
 import knex from '../../configs/knex'
+import { IItem } from '../../types/index'
 
-export default class ItemRepository {
-  public static async findAll() {
+class ItemRepo {
+  public async findAll(): Promise<IItem[]> {
     try {
-      const itemList = await knex('items').select('*')
+      const itemList: IItem[] = await knex<IItem>('items')
 
       return itemList
     } catch (error) {
@@ -11,9 +12,10 @@ export default class ItemRepository {
     }
   }
 
-  public static async findByPoint(pointId: number) {
+  public async findByPoint(pointId: number): Promise<IItem[]> {
     try {
-      const itemList = await knex('items')
+      const itemList: IItem[] = await knex<IItem>('items')
+        .select('items.*')
         .join('point_items', 'items.id', '=', 'point_items.item_id')
         .where('point_items.point_id', pointId)
 
@@ -23,3 +25,5 @@ export default class ItemRepository {
     }
   }
 }
+
+export default new ItemRepo()
