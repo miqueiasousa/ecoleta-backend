@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import ItemService from '../services/ItemService'
 
 class ItemController {
-  public async index(req: Request, res: Response): Promise<Response<JSON>> {
+  public async index(req: Request, res: Response) {
     try {
       const itemList = await ItemService.index()
 
