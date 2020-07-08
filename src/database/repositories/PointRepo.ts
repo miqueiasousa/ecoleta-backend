@@ -1,20 +1,10 @@
 import knex from '../../configs/knex'
+import { IPoint, IPointRepoCreateDTO } from '../../types/index'
 
-interface IPoint {
-  name: string
-  email: string
-  whatsapp: string
-  street: string
-  number: number
-  city: string
-  uf: string
-  image_url: string
-}
-
-export default class ItemRepository {
-  public static async create(data: IPoint) {
+class PointRepo {
+  public async create(data: IPointRepoCreateDTO) {
     try {
-      const [id] = await knex('points').insert(data)
+      const [id]: number[] = await knex('points').insert(data)
 
       return id
     } catch (error) {
@@ -22,9 +12,9 @@ export default class ItemRepository {
     }
   }
 
-  public static async findOne(id: number) {
+  public async findById(id: number) {
     try {
-      const point = await knex('points').where('id', id).first()
+      const [point] = await knex<IPoint>('points').where('id', id)
 
       return point
     } catch (error) {
@@ -32,9 +22,11 @@ export default class ItemRepository {
     }
   }
 
-  public static async findByUfAndCity(uf: string, city: string) {
+  public async findByUfAndCity(uf: string, city: string) {
     try {
-      const pointList = await knex('points').where('uf', uf).where('city', city)
+      const pointList = await knex<IPoint>('points')
+        .where('uf', uf)
+        .andWhere('city', city)
 
       return pointList
     } catch (error) {
@@ -42,3 +34,5 @@ export default class ItemRepository {
     }
   }
 }
+
+export default new PointRepo()
