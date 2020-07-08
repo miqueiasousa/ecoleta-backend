@@ -10,10 +10,9 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')))
 app.use(ItemRouter)
 app.use(PointRouter)
-
-app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')))
 
 app.use(errors())
 

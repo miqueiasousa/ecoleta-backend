@@ -1,9 +1,9 @@
 import knex from '../../configs/knex'
 
-export default class ItemRepository {
-  public static async create(pointId: number, itemId: number) {
+class PointItemsRepository {
+  public async create(pointId: number, itemId: number) {
     try {
-      const [id] = await knex('point_items').insert({
+      const [id]: number[] = await knex('point_items').insert({
         point_id: pointId,
         item_id: itemId
       })
@@ -14,3 +14,5 @@ export default class ItemRepository {
     }
   }
 }
+
+export default new PointItemsRepository()

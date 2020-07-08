@@ -12,7 +12,7 @@ class ItemRepo {
     }
   }
 
-  public async findByPoint(pointId: number) {
+  public async findByPointId(pointId: number) {
     try {
       const itemList: IItem[] = await knex
         .select('items.*')
