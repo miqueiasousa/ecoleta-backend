@@ -1,11 +1,14 @@
 import { Request, Response } from 'express'
 import PointService from '../services/PointService'
 
-export default class PointController {
-  public static async index(req: Request, res: Response) {
+class PointController {
+  public async index(req: Request, res: Response) {
     try {
       const { uf, city } = req.query
-      const pointList = await PointService.index(uf, city)
+      const pointList = await PointService.index({
+        uf: String(uf),
+        city: String(city)
+      })
 
       return res.json(pointList)
     } catch (error) {
@@ -13,38 +16,21 @@ export default class PointController {
     }
   }
 
-  public static async show(req: Request, res: Response) {
+  public async show(req: Request, res: Response) {
     try {
-      const { point, itemList } = await PointService.show(Number(req.params.id))
+      const point = await PointService.show(Number(req.params.id))
 
-      return res.json({ ...point, items: itemList })
+      return res.json(point)
     } catch (error) {
       return res.json({ message: error.message })
     }
   }
 
-  public static async store(req: Request, res: Response) {
+  public async store(req: Request, res: Response) {
     try {
-      const {
-        name,
-        email,
-        whatsapp,
-        street,
-        number,
-        city,
-        uf,
-        items
-      } = req.body
       const pointId = await PointService.store({
-        name,
-        email,
-        whatsapp,
-        street,
-        number,
-        city,
-        uf,
-        image: req.file.filename,
-        items
+        ...req.body,
+        image: req.file.filename
       })
 
       return res.location(`/points/${pointId}`).end()
@@ -53,3 +39,5 @@ export default class PointController {
     }
   }
 }
+
+export default new PointController()

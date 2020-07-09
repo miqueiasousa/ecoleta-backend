@@ -1,81 +1,60 @@
 import PointRepo from '../database/repositories/PointRepo'
 import ItemRepo from '../database/repositories/ItemRepo'
 import PointItemsRepo from '../database/repositories/PointItemsRepo'
+import { IPointServiceStoreDTO, IPointServiceIndexDTO } from '../types/index'
 
-interface IData {
-  name: string
-  email: string
-  whatsapp: string
-  street: string
-  number: number
-  city: string
-  uf: string
-  image: string
-  items: string
-}
-
-export default class ItemService {
-  public static async index(uf, city) {
+class PointService {
+  public async index({ uf, city }: IPointServiceIndexDTO) {
     try {
       const pointList = await PointRepo.findByUfAndCity(uf, city)
-      const pointListWithItemList = await Promise.all(
+      const serializedPointList = await Promise.all(
         pointList.map(async (point) => {
-          const itemList = await ItemRepo.findByPoint(point.id)
+          const itemList = await ItemRepo.findByPointId(point.id)
 
           return { ...point, items: itemList }
         })
       )
 
-      return pointListWithItemList
+      return serializedPointList
     } catch (error) {
       throw new Error(error.message)
     }
   }
 
-  public static async show(id: number) {
+  public async show(id: number) {
     try {
-      const point = await PointRepo.findOne(id)
+      const point = await PointRepo.findById(id)
 
       if (!point) {
         throw new Error('Point not found')
       }
 
-      const itemList = await ItemRepo.findByPoint(id)
+      const itemList = await ItemRepo.findByPointId(id)
 
-      return { point, itemList }
+      return { ...point, items: itemList }
     } catch (error) {
       throw new Error(error.message)
     }
   }
 
-  public static async store({
-    name,
-    email,
-    whatsapp,
-    street,
-    number,
-    city,
-    uf,
-    image,
-    items
-  }: IData) {
+  public async store(data: IPointServiceStoreDTO) {
     try {
-      const image_url = `http://localhost:3030/uploads/${image}`
-      const itemList = items.split(',').map((item) => Number(item.trim()))
       const pointId = await PointRepo.create({
-        name,
-        email,
-        whatsapp,
-        street,
-        number,
-        city,
-        uf,
-        image_url
+        name: data.name,
+        email: data.email,
+        whatsapp: data.whatsapp,
+        street: data.street,
+        number: data.number,
+        city: data.city,
+        uf: data.uf,
+        image_url: `http://localhost:3030/uploads/${data.image}`
       })
 
       if (!pointId) {
         throw new Error('Internal Server Error')
       }
+
+      const itemList = data.items.split(',').map((item) => Number(item.trim()))
 
       await Promise.all(
         itemList.map(async (itemId) => {
@@ -89,3 +68,5 @@ export default class ItemService {
     }
   }
 }
+
+export default new PointService()
