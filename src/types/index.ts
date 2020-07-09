@@ -26,3 +26,20 @@ export interface IPointRepoCreateDTO {
   uf: string
   image_url: string
 }
+
+export interface IPointServiceStoreDTO {
+  name: string
+  email: string
+  whatsapp: string
+  street: string
+  number: number
+  city: string
+  uf: string
+  image: string
+  items: string
+}
+
+export interface IPointServiceIndexDTO {
+  uf: string
+  city: string
+}
