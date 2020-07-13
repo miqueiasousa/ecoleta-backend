@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { celebrate, Joi } from 'celebrate'
 import multer from 'multer'
-import multerConfig from '../configs/multer'
+import multerConfig from '../../configs/multer'
 import PointController from '../controllers/PointController'
 
 const router = Router()
