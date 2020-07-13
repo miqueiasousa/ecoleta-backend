@@ -1,8 +1,8 @@
 import express from 'express'
 import path from 'path'
 import cors from 'cors'
-import ItemRouter from './routes/ItemRouter'
-import PointRouter from './routes/PointRouter'
+import ItemRouter from './api/routes/ItemRouter'
+import PointRouter from './api/routes/PointRouter'
 import { errors } from 'celebrate'
 
 const app = express()
