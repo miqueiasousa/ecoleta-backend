@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import ItemService from '../services/ItemService'
+import ItemService from '../../services/ItemService'
 
 class ItemController {
   public async index(req: Request, res: Response) {

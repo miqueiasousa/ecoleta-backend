@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import PointService from '../services/PointService'
+import PointService from '../../services/PointService'
 
 class PointController {
   public async index(req: Request, res: Response) {
