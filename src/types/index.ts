@@ -7,8 +7,6 @@ export interface IItem {
 export interface IPoint {
   id: number
   name: string
-  email: string
-  whatsapp: string
   street: string
   number: number
   city: string
@@ -18,8 +16,6 @@ export interface IPoint {
 
 export interface IPointRepoCreateDTO {
   name: string
-  email: string
-  whatsapp: string
   street: string
   number: number
   city: string
@@ -29,8 +25,6 @@ export interface IPointRepoCreateDTO {
 
 export interface IPointServiceStoreDTO {
   name: string
-  email: string
-  whatsapp: string
   street: string
   number: number
   city: string

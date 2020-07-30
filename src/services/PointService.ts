@@ -41,8 +41,6 @@ class PointService {
     try {
       const pointId = await PointRepo.create({
         name: data.name,
-        email: data.email,
-        whatsapp: data.whatsapp,
         street: data.street,
         number: data.number,
         city: data.city,
