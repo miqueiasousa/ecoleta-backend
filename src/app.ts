@@ -4,6 +4,9 @@ import cors from 'cors'
 import ItemRouter from './api/routes/ItemRouter'
 import PointRouter from './api/routes/PointRouter'
 import { errors } from 'celebrate'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const app = express()
 
