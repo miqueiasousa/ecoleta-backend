@@ -4,10 +4,9 @@ import PointService from '../../services/PointService'
 class PointController {
   public async index(req: Request, res: Response) {
     try {
-      const { uf, city } = req.query
       const pointList = await PointService.index({
-        uf: String(uf),
-        city: String(city)
+        uf: String(req.query.uf),
+        city: String(req.query.city)
       })
 
       return res.json(pointList)

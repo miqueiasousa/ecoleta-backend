@@ -1,12 +1,11 @@
 import PointRepo from '../database/repositories/PointRepo'
 import ItemRepo from '../database/repositories/ItemRepo'
 import PointItemsRepo from '../database/repositories/PointItemsRepo'
-import { IPointServiceStoreDTO, IPointServiceIndexDTO } from '../types/index'
 
 class PointService {
-  public async index({ uf, city }: IPointServiceIndexDTO) {
+  public async index(data: { uf: string; city: string }) {
     try {
-      const pointList = await PointRepo.findByUfAndCity(uf, city)
+      const pointList = await PointRepo.findByUfAndCity({ ...data })
       const serializedPointList = await Promise.all(
         pointList.map(async (point) => {
           const itemList = await ItemRepo.findByPointId(point.id)
@@ -37,26 +36,42 @@ class PointService {
     }
   }
 
-  public async store(data: IPointServiceStoreDTO) {
+  public async store({
+    name,
+    street,
+    number,
+    uf,
+    city,
+    image,
+    items
+  }: {
+    name: string
+    street: string
+    number: number
+    uf: string
+    city: string
+    image: string
+    items: string
+  }) {
     try {
       const pointId = await PointRepo.create({
-        name: data.name,
-        street: data.street,
-        number: data.number,
-        city: data.city,
-        uf: data.uf,
-        image_url: `http://localhost:3030/uploads/${data.image}`
+        name,
+        street,
+        number,
+        uf,
+        city,
+        image_url: `${process.env.BASE_URL}/uploads/${image}`
       })
 
       if (!pointId) {
         throw new Error('Internal Server Error')
       }
 
-      const itemList = data.items.split(',').map((item) => Number(item.trim()))
+      const itemList = items.split(',').map((item) => Number(item.trim()))
 
       await Promise.all(
         itemList.map(async (itemId) => {
-          await PointItemsRepo.create(pointId, itemId)
+          await PointItemsRepo.create({ pointId, itemId })
         })
       )
 

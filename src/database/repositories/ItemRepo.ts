@@ -1,5 +1,5 @@
 import knex from '../../configs/knex'
-import { IItem } from '../../types/index'
+import { IItem } from '../../interfaces/IItem'
 
 class ItemRepo {
   public async findAll() {

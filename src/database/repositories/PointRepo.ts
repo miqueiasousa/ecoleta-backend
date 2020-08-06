@@ -1,8 +1,8 @@
 import knex from '../../configs/knex'
-import { IPoint, IPointRepoCreateDTO } from '../../types/index'
+import { IPoint, IPointDTO } from '../../interfaces/IPoint'
 
 class PointRepo {
-  public async create(data: IPointRepoCreateDTO) {
+  public async create(data: IPointDTO) {
     try {
       const [id]: number[] = await knex('points').insert(data)
 
@@ -22,11 +22,11 @@ class PointRepo {
     }
   }
 
-  public async findByUfAndCity(uf: string, city: string) {
+  public async findByUfAndCity(data: { uf: string; city: string }) {
     try {
       const pointList = await knex<IPoint>('points')
-        .where('uf', uf)
-        .andWhere('city', city)
+        .where('uf', data.uf)
+        .andWhere('city', data.city)
 
       return pointList
     } catch (error) {

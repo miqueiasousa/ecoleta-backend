@@ -1,11 +1,11 @@
 import knex from '../../configs/knex'
 
 class PointItemsRepository {
-  public async create(pointId: number, itemId: number) {
+  public async create(data: { pointId: number; itemId: number }) {
     try {
       const [id]: number[] = await knex('point_items').insert({
-        point_id: pointId,
-        item_id: itemId
+        point_id: data.pointId,
+        item_id: data.itemId
       })
 
       return id
