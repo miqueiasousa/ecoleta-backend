@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn build && node build/index.js",
-    "start:dev": "ts-node-dev --ignore-watch node_modules src/server.ts",
+    "start:dev": "ts-node-dev --ignore-watch node_modules src/index.ts",
     "build": "rimraf build && tsc",
     "lint": "eslint src --ext .ts",
     "knex:seed": "knex --knexfile knexfile.ts seed:run",
